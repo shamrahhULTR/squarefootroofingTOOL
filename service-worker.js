@@ -1,5 +1,5 @@
-const CACHE = 'close-board-sfr-v1';
-const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon.svg'];
+const CACHE = 'close-board-sfr-v2';
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon.svg', './favicon.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
