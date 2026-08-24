@@ -1749,14 +1749,16 @@ const financingHighlights = {
    list, so the four can never drift apart. */
 const PRODUCTS = {
   'SFR Architect Series':{icon:'AR', group:'system', customer:'SFR Architect Series, Class 3 Architectural Fiberglass Shingle System', help:'Architectural fiberglass shingle. Limited lifetime warranty, Class 3 impact, 130 mph wind, Class A fire.', scope:'SFR Architect Series Class 3 impact rated architectural fiberglass shingles (Class A fire, 130 mph wind, algae resistance)', warranty:['Limited lifetime manufacturer warranty on architectural shingles','Class 3 impact rated, 130 mph wind coverage, Class A fire, algae resistance']},
-  'SFR Storm Series':{icon:'SM', group:'system', customer:'SFR Storm Series, Class 4 Storm Rated Shingle System', help:'Class 4 impact rated SBS rubberized shingle. 160 mph wind rated limited warranty, algae resistance.', scope:'SFR Storm Series Class 4 impact rated SBS rubberized shingles that flex under impact instead of cracking, 160 mph wind rated', warranty:['Class 4 storm rated shingle limited warranty, 160 mph wind rated','Class 4 impact rating. Ask your insurance company about premium discounts']},
-  'SFR Metal Series':{icon:'MT', group:'system', customer:'SFR Metal Series, Premium Metal Roofing System', help:'Premium metal roofing system. 50 year limited warranty, 160 mph wind rated, Class A fire, Class 4 impact.', scope:'SFR Metal Series premium metal roofing system (Class A fire, Class 4 impact, 160 mph wind rated)', warranty:['50 year manufacturer limited warranty on the metal roofing system','Class A fire, Class 4 impact, 160 mph wind rated system']},
+  'SFR Storm Series':{icon:'SM', group:'system', customer:'SFR Storm Series, TruDefinition\u00ae Duration STORM\u00ae Shingles by Owens Corning', help:'TruDefinition\u00ae Duration STORM\u00ae by Owens Corning, with WeatherGuard Technology. Class 4 impact, limited lifetime warranty, 130 mph wind resistance limited warranty.', scope:'SFR Storm Series, TruDefinition\u00ae Duration STORM\u00ae Shingles by Owens Corning, Class 4 impact rated with WeatherGuard Technology, 130 mph wind resistance limited warranty', warranty:['Limited lifetime warranty, TruDefinition\u00ae Duration STORM\u00ae by Owens Corning','130 mph Wind Resistance Limited Warranty','Class 4 impact rating. Ask your insurance company about premium discounts']},
+  'SFR Flex Series':{icon:'FX', group:'system', customer:'SFR Flex Series, TruDefinition\u00ae Duration FLEX\u2122 Shingles by Owens Corning', help:'TruDefinition\u00ae Duration FLEX\u2122 by Owens Corning, SBS polymer modified asphalt with SureNail Technology, the highest impact rating available in a shingle. Limited lifetime warranty, 130 mph wind resistance limited warranty.', scope:'SFR Flex Series, TruDefinition\u00ae Duration FLEX\u2122 Shingles by Owens Corning, SBS polymer modified asphalt with SureNail Technology, 130 mph wind resistance limited warranty', warranty:['Limited lifetime warranty, TruDefinition\u00ae Duration FLEX\u2122 by Owens Corning','130 mph Wind Resistance Limited Warranty','SureNail Technology, 42 percent better nail pull resistance than standard shingles']},
+  'SFR Metal Series':{icon:'MT', group:'system', customer:'SFR Metal Series, Premium Metal Roofing System', help:'Premium metal roofing system for the rare job that calls for it. 50 year limited warranty, 120+ mph wind, Class A fire, Class 4 impact. Special order, not a standard tier default.', scope:'SFR Metal Series premium metal roofing system (Class A fire, Class 4 impact, 120+ mph wind)', warranty:['50 year manufacturer limited warranty on the metal roofing system','Class A fire, Class 4 impact, 120+ mph wind rated system']},
 
   'Full Tear Off':{icon:'TO', group:'system', customer:'Complete Tear Off and Haul Away', help:'Complete tear off and disposal of all existing roofing, down to the bare deck.', scope:'Complete tear off and haul away of all existing roofing, down to the bare deck. Never an overlay', warranty:[]},
   'Deck Inspection and Renail':{icon:'DK', group:'system', customer:'Full Deck Inspection and Renailing', help:'Every sheet inspected and renailed to code. Soft or rotten wood flagged before it gets covered.', scope:'Full deck inspection with photo documentation and renailing to code. Soft or rotten wood is flagged before anything covers it', warranty:[]},
   'Decking Replacement Allowance':{icon:'DR', group:'system', customer:'Roof Decking Replacement Allowance', help:'Plywood and OSB decking replacement allowance included in the price.', scope:'Roof decking replacement allowance included, so bad wood does not become a surprise change order', warranty:[]},
 
-  'Synthetic Underlayment':{icon:'UL', group:'system', customer:'High Performance Synthetic Underlayment', help:'Synthetic underlayment across the entire deck. No felt paper anywhere.', scope:'High performance synthetic underlayment across the entire deck. No felt paper anywhere on the roof', warranty:[]},
+  'ProArmor Underlayment':{icon:'PA', group:'system', customer:'ProArmor\u00ae Synthetic Roof Underlayment by Owens Corning', help:'ProArmor\u00ae by Owens Corning, installed across the entire deck. No felt paper anywhere.', scope:'ProArmor\u00ae Synthetic Roof Underlayment by Owens Corning, installed across the entire deck. No felt paper anywhere on the roof', warranty:[]},
+  'Deck Defense Underlayment':{icon:'DD', group:'system', customer:'Deck Defense\u00ae Synthetic Roof Underlayment by Owens Corning', help:'Deck Defense\u00ae by Owens Corning, installed across the entire deck. No felt paper anywhere.', scope:'Deck Defense\u00ae Synthetic Roof Underlayment by Owens Corning, installed across the entire deck. No felt paper anywhere on the roof', warranty:[]},
   'Ice & Water Shield':{icon:'IW', group:'protection', customer:'Ice & Water Leak Barrier', help:'Self sealing leak barrier at eaves and every penetration.', scope:'Ice & water leak barrier sealed at all eaves and around every penetration', warranty:[]},
   'Lifetime Ice & Water Shield':{icon:'LI', group:'protection', customer:'Lifetime Ice & Water Shield', help:'Upgraded leak barrier backed by a lifetime manufacturer warranty at eaves, valleys and every penetration.', scope:'Lifetime warrantied ice & water shield sealed at all eaves, valleys and penetrations', warranty:['Lifetime manufacturer warranty on the ice & water membrane']},
   'Valley Ice & Water Liner':{icon:'VL', group:'protection', customer:'Ice & Water Lined Valleys', help:'Every valley fully lined with leak barrier before metal goes down.', scope:'Every valley fully lined with ice & water barrier before any valley metal is installed', warranty:[]},
@@ -1794,11 +1796,6 @@ const PRODUCTS = {
   'Manufacturer Warranty Registration':{icon:'WR', group:'project', customer:'Manufacturer Warranty Registered For You', help:'We register the manufacturer warranty in the homeowner name after final inspection.', scope:'Manufacturer warranty registered in your name by our office after the final inspection', warranty:['Manufacturer warranty registered on your behalf after final inspection']},
   'Workmanship Warranty':{icon:'WW', group:'project', customer:'Workmanship Warranty on Installation', help:'Our own labor warranty on the installation itself.', scope:'', warranty:['WORKMANSHIP_PLACEHOLDER']}
 };
-const UNDERLAYMENT_BRANDS = {deckdefense:'Deck Defense by Owens Corning', proarmor:'ProArmor by Owens Corning', rhino:'RhinoRoof'};
-function underlaymentLabel(base, opt){
-  const brand = UNDERLAYMENT_BRANDS[opt && opt.underlaymentBrand];
-  return brand ? `${base} (${brand})` : base;
-}
 const productCatalog = Object.keys(PRODUCTS);
 const productIcons = Object.fromEntries(Object.entries(PRODUCTS).map(([k,v])=>[k, v.icon]));
 const customerProductNames = Object.fromEntries(Object.entries(PRODUCTS).map(([k,v])=>[k, v.customer]));
@@ -1831,15 +1828,15 @@ const TIER_LABELS = {A:'Good', B:'Better', C:'Best'};
    items upgraded to their lifetime versions plus one new item, Best = everything in Better.
    The rep can still add or remove items freely per option, and the Pull Down button in the
    editor re-syncs a tier to its lower tier on demand. */
-const GOOD_COMPONENTS = ['Full Tear Off','Deck Inspection and Renail','Synthetic Underlayment','Ice & Water Shield','Valley Ice & Water Liner','Sealed Penetrations','Drip Edge','Step & Counter Flashing','Valley Metal','Pipe Boots & Collars','Roof to Wall Flashing','Starter Strip','Hip & Ridge Caps','Six Nail Fastening Pattern','Ridge Vent','Soffit Intake Vents','Permit & Final Inspection','Magnetic Nail Sweep & Cleanup','Manufacturer Warranty Registration','Workmanship Warranty'];
-const BETTER_COMPONENTS = GOOD_COMPONENTS.map(p => p==='Pipe Boots & Collars' ? 'Lifetime Pipe Boots' : p==='Ice & Water Shield' ? 'Lifetime Ice & Water Shield' : p).concat(['Heat Stack Vent Replacement']);
+const GOOD_COMPONENTS = ['Full Tear Off','Deck Inspection and Renail','ProArmor Underlayment','Ice & Water Shield','Valley Ice & Water Liner','Sealed Penetrations','Drip Edge','Step & Counter Flashing','Valley Metal','Pipe Boots & Collars','Roof to Wall Flashing','Starter Strip','Hip & Ridge Caps','Six Nail Fastening Pattern','Ridge Vent','Soffit Intake Vents','Permit & Final Inspection','Magnetic Nail Sweep & Cleanup','Manufacturer Warranty Registration','Workmanship Warranty'];
+const BETTER_COMPONENTS = GOOD_COMPONENTS.map(p => p==='Pipe Boots & Collars' ? 'Lifetime Pipe Boots' : p==='Ice & Water Shield' ? 'Lifetime Ice & Water Shield' : p==='ProArmor Underlayment' ? 'Deck Defense Underlayment' : p).concat(['Heat Stack Vent Replacement']);
 const BEST_COMPONENTS = [...BETTER_COMPONENTS];
 /* Kept for the price helper rate guide and anything still referencing the old name. */
 const FULL_SYSTEM_COMPONENTS = GOOD_COMPONENTS;
 const defaultOptions = () => ({
-  A:{key:'A', name:'SFR Architect Series', label:'Good', badge:'Lifetime Architectural System', impactClass:'Class 3 Impact Rated', retail:0, squares:0, perSquare:0, perSquareOver:0, efficiencyCredit:0, senior:false, military:false, couponType:'none', couponCustom:0, quickStartType:'10p', preferredPaymentSavings:false, flexibleInstall:false, planId:'FF-180', customApr:11.9, customTerm:180, underlaymentBrand:'', products:['SFR Architect Series',...GOOD_COMPONENTS], customProduct:'', notes:'Architectural fiberglass shingle system with a limited lifetime warranty, Class 3 impact resistance, 130 mph wind coverage, Class A fire, and built in algae resistance. Full tear off and a complete component build from the deck up, never an overlay.'},
-  B:{key:'B', name:'SFR Storm Series', label:'Better', badge:'Most Popular · Storm Rated', impactClass:'Class 4 Impact Rated', retail:0, squares:0, perSquare:0, perSquareOver:0, efficiencyCredit:0, senior:false, military:false, couponType:'500', couponCustom:0, quickStartType:'10p', preferredPaymentSavings:false, flexibleInstall:false, planId:'FF-180', customApr:11.9, customTerm:180, underlaymentBrand:'deckdefense', products:['SFR Storm Series',...BETTER_COMPONENTS], customProduct:'', notes:'Class 4 impact rated SBS rubberized shingles that flex under impact instead of cracking, 160 mph wind rated, with algae resistance. Lifetime pipe boots and lifetime ice & water shield upgrade the whole system, not just the shingle. The storm package built for coastal Virginia weather, and a Class 4 rating your insurance company may reward.'},
-  C:{key:'C', name:'SFR Metal Series', label:'Best', badge:'The Last Roof You\u2019ll Ever Need', impactClass:'Class 4 Impact Rated', retail:0, squares:0, perSquare:0, perSquareOver:0, efficiencyCredit:0, senior:false, military:false, couponType:'500', couponCustom:0, quickStartType:'10p', preferredPaymentSavings:false, flexibleInstall:false, planId:'FF-180', customApr:11.9, customTerm:180, underlaymentBrand:'deckdefense', products:['SFR Metal Series',...BEST_COMPONENTS], customProduct:'', notes:'Premium metal roofing system with a 50 year limited warranty, 160 mph wind rated, Class A fire, and Class 4 impact. Includes every upgrade in Better plus a roofing material built to outlast everything around it. The last roof most homes will ever need.'}
+  A:{key:'A', name:'SFR Architect Series', label:'Good', badge:'Lifetime Architectural System', impactClass:'Class 3 Impact Rated', retail:0, squares:0, perSquare:0, perSquareOver:0, efficiencyCredit:0, senior:false, military:false, couponType:'none', couponCustom:0, quickStartType:'10p', preferredPaymentSavings:false, flexibleInstall:false, planId:'FF-180', customApr:11.9, customTerm:180, products:['SFR Architect Series',...GOOD_COMPONENTS], customProduct:'', notes:'Architectural fiberglass shingle system with a limited lifetime warranty, Class 3 impact resistance, 130 mph wind coverage, Class A fire, and built in algae resistance. Full tear off and a complete component build from the deck up, never an overlay.'},
+  B:{key:'B', name:'SFR Storm Series', label:'Better', badge:'Most Popular · Storm Rated', impactClass:'Class 4 Impact Rated', retail:0, squares:0, perSquare:0, perSquareOver:0, efficiencyCredit:0, senior:false, military:false, couponType:'500', couponCustom:0, quickStartType:'10p', preferredPaymentSavings:false, flexibleInstall:false, planId:'FF-180', customApr:11.9, customTerm:180, products:['SFR Storm Series',...BETTER_COMPONENTS], customProduct:'', notes:'TruDefinition\u00ae Duration STORM\u00ae Shingles by Owens Corning, with WeatherGuard Technology. Class 4 impact rated, limited lifetime warranty, 130 mph wind resistance limited warranty. Lifetime pipe boots and lifetime ice & water shield upgrade the whole system, not just the shingle. The storm package built for coastal Virginia weather, and a Class 4 rating your insurance company may reward.'},
+  C:{key:'C', name:'SFR Flex Series', label:'Best', badge:'Maximum Impact Protection', impactClass:'Class 4 Impact Rated', retail:0, squares:0, perSquare:0, perSquareOver:0, efficiencyCredit:0, senior:false, military:false, couponType:'500', couponCustom:0, quickStartType:'10p', preferredPaymentSavings:false, flexibleInstall:false, planId:'FF-180', customApr:11.9, customTerm:180, products:['SFR Flex Series',...BEST_COMPONENTS], customProduct:'', notes:'TruDefinition\u00ae Duration FLEX\u2122 Shingles by Owens Corning, SBS polymer modified asphalt with SureNail Technology, the highest impact rating available in a shingle. Limited lifetime warranty, 130 mph wind resistance limited warranty. Includes every upgrade in Better in the toughest shingle we install. Metal roofing is available as a special order swap on this tier when the job calls for it.'}
 });
 function savedRepInfo(){try{return JSON.parse(localStorage.getItem(REP_INFO_KEY)||'{}')||{};}catch(e){return {};}}
 function persistRepInfo(){try{localStorage.setItem(REP_INFO_KEY, JSON.stringify({repName:state.repName||'', branch:state.branch||BRAND.defaultBranch}));}catch(e){}}
@@ -1860,7 +1857,7 @@ function prettyDate(iso){
 function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[s]));}
 function productDisplayName(p, customerFacing=false, opt=null){
   const base = customerFacing ? (customerProductNames[p] || p) : p;
-  return p==='Synthetic Underlayment' ? underlaymentLabel(base, opt) : base;
+  return base;
 }
 function productEntries(opt, customerFacing=false){
   const entries = (opt.products||[]).map(p=>({internal:p, label:productDisplayName(p, customerFacing, opt), icon:productIcons[p] || 'AD'}));
@@ -2167,7 +2164,6 @@ function renderOptionEditor(){
     <div class="field"><label>Option Name</label><input id="optName" value="${escapeHtml(opt.name)}"></div>
     <div class="row"><div class="field"><label>Customer Facing Badge</label><input id="optBadge" value="${escapeHtml(opt.badge)}"></div><div class="field"><label>Impact Class</label><input id="optImpactClass" value="${escapeHtml(opt.impactClass||'')}" placeholder="Class 3 Impact Rated"></div></div>
     <div class="field"><label>Work Included</label><div class="product-check">${productCatalog.map(p=>`<label class="check" title="${escapeHtml(productHelp[p]||'')}"><input type="checkbox" class="prodCheck" value="${escapeHtml(p)}" ${opt.products.includes(p)?'checked':''}> <span class="icon">${escapeHtml(productIcons[p]||'AD')}</span> ${escapeHtml(p)}</label>`).join('')}</div><div class="help">Selections drive the customer facing scope and warranty summaries. Final pricing still comes from your measured estimate.</div></div>
-    <div class="field"><label>Underlayment Brand</label><select id="underlaymentBrand"><option value="" ${!opt.underlaymentBrand?'selected':''}>Rep's Choice, Deck Defense, ProArmor or RhinoRoof</option><option value="deckdefense" ${opt.underlaymentBrand==='deckdefense'?'selected':''}>Deck Defense by Owens Corning</option><option value="proarmor" ${opt.underlaymentBrand==='proarmor'?'selected':''}>ProArmor by Owens Corning</option><option value="rhino" ${opt.underlaymentBrand==='rhino'?'selected':''}>RhinoRoof</option></select><div class="help">Only shows on the scope and Work Included lines when Synthetic Underlayment is checked above.</div></div>
     <div class="field"><label>Custom Line Item / Add On</label><input id="customProduct" value="${escapeHtml(opt.customProduct||'')}" placeholder="Example: Cedar accent roofing over entry"><div class="help">Use for job specific work. Keep the wording customer friendly because it appears in Presentation Mode and on the printed proposal.</div></div>
     <div class="field"><label>Scope / Presentation Notes</label><textarea id="optNotes">${escapeHtml(opt.notes||'')}</textarea><div class="help">Rep reference only. This no longer shows on the customer facing option cards, so write here freely.</div></div>
     <div class="price-helper">
@@ -2195,7 +2191,6 @@ function renderOptionEditor(){
   $('#optName').oninput=e=>updateEditorState(()=>{opt.name=e.target.value}, false);
   $('#optBadge').oninput=e=>updateEditorState(()=>{opt.badge=e.target.value}, false);
   $('#optImpactClass').oninput=e=>updateEditorState(()=>{opt.impactClass=e.target.value}, false);
-  $('#underlaymentBrand').onchange=e=>updateEditorState(()=>{opt.underlaymentBrand=e.target.value});
   $('#optNotes').oninput=e=>updateEditorState(()=>{opt.notes=e.target.value}, false);
   $('#customProduct').oninput=e=>updateEditorState(()=>{opt.customProduct=e.target.value}, false);
   $('#retail').oninput=e=>updateEditorState(()=>{opt.retail=clamp(e.target.value)}, false);
@@ -2445,7 +2440,7 @@ function hasMetalRoof(opt){
   return hasProduct(opt,'SFR Metal Series');
 }
 function hasShingleRoof(opt){
-  return hasProduct(opt,'SFR Storm Series') || hasProduct(opt,'SFR Architect Series');
+  return hasProduct(opt,'SFR Storm Series') || hasProduct(opt,'SFR Architect Series') || hasProduct(opt,'SFR Flex Series');
 }
 function hasRoofSystem(opt){
   return hasMetalRoof(opt) || hasShingleRoof(opt);
@@ -2455,8 +2450,7 @@ function scopeItems(opt){
   const picked = opt.products || [];
   productCatalog.forEach(name=>{
     if(!picked.includes(name)) return;
-    let line = (PRODUCTS[name] || {}).scope;
-    if(name==='Synthetic Underlayment') line = underlaymentLabel(line, opt);
+    const line = (PRODUCTS[name] || {}).scope;
     if(line && !items.includes(line)) items.push(line);
   });
   const custom = String(opt.customProduct||'').trim();
@@ -2718,8 +2712,9 @@ function proposalPaymentBadge(label){
 }
 function proposalWarrantyCards(opt){
   const cards = [];
-  if(hasProduct(opt,'SFR Metal Series')){ cards.push(['50 Year Limited','Manufacturer Panel Warranty']); cards.push(['Class 4 Impact','Class A Fire, 160 MPH Wind']); }
-  if(hasProduct(opt,'SFR Storm Series')){ cards.push(['Class 4 Impact','Storm Rated Shingles']); cards.push(['160 MPH Wind','Limited Warranty']); }
+  if(hasProduct(opt,'SFR Flex Series')){ cards.push(['Limited Lifetime','Duration FLEX by Owens Corning']); cards.push(['Class 4 Impact','130 MPH Wind Resistance']); }
+  if(hasProduct(opt,'SFR Metal Series')){ cards.push(['50 Year Limited','Manufacturer Panel Warranty']); cards.push(['Class 4 Impact','Class A Fire, 120+ MPH Wind']); }
+  if(hasProduct(opt,'SFR Storm Series')){ cards.push(['Class 4 Impact','Duration STORM by Owens Corning']); cards.push(['130 MPH Wind','Resistance Limited Warranty']); }
   if(hasProduct(opt,'SFR Architect Series')){ cards.push(['Class 3 Impact','Limited Lifetime Shingles']); cards.push(['130 MPH Wind','Class A Fire']); }
   if(hasProduct(opt,'Lifetime Pipe Boots')){ cards.push(['Lifetime Warranty','Pipe Boots & Collars']); }
   if(hasProduct(opt,'Lifetime Ice & Water Shield')){ cards.push(['Lifetime Warranty','Ice & Water Shield']); }

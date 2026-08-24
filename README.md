@@ -17,15 +17,18 @@ the tool as "The Investment Planner". The logo is embedded as a data URI in
 `sfr-logo-reversed.png` is the knockout; neither is loaded at runtime.
 
 Good / Better / Best default to the SFR lineup: **SFR Architect Series** (architectural
-fiberglass), **SFR Storm Series** (Class 4 storm rated), and **SFR Metal Series**
-(premium metal), each with the full component stack described below.
+fiberglass), **SFR Storm Series** (TruDefinition® Duration STORM® by Owens Corning,
+Class 4 impact), and **SFR Flex Series** (TruDefinition® Duration FLEX™ by Owens
+Corning, Class 4 impact), each with the full component stack described below. Metal
+roofing exists in the catalog as a rare special order swap on the Best tier, not a
+default (see Impact class and wind rating, below).
 
 ## Options: Good, Better, Best
 
 The three options are labeled **Good / Better / Best** everywhere (tabs, focus
 selectors, proposal) rather than Option A/B/C. Labels live in `TIER_LABELS` at the top
 of the options block. They default to SFR Architect Series (Good), SFR Storm Series
-(Better), and SFR Metal Series (Best).
+(Better), and SFR Flex Series (Best).
 
 ## Work included: the full warrantied system
 
@@ -49,17 +52,35 @@ whatever is currently checked on the tier below it, so if Good gets a mid-appoin
 change, Better and Best can be brought back in sync with one tap instead of manually
 re-checking boxes.
 
-**Synthetic underlayment brand.** Good defaults to "Rep's Choice" among Deck Defense by
-Owens Corning, ProArmor by Owens Corning, or RhinoRoof. Better and Best default to Deck
-Defense by Owens Corning. The brand selector lives in the editor and only affects the
-Work Included label and scope line when Synthetic Underlayment is checked.
+**Underlayment is a real Owens Corning product, not a generic label.** Good ships with
+ProArmor® Synthetic Roof Underlayment by Owens Corning. Better and Best ship with
+Deck Defense® Synthetic Roof Underlayment by Owens Corning, an upgrade over Good.
+This is baked directly into each tier's product list as two distinct `PRODUCTS`
+entries (`ProArmor Underlayment`, `Deck Defense Underlayment`), not a rep-facing
+selector, so there is nothing for a rep to configure or get wrong on a job.
 
-**Impact class and wind rating.** Good carries a Class 3 Impact Rated badge (SFR
-Architect Series, 130 mph wind). Better and Best carry Class 4 Impact Rated badges,
-and both were bumped to a 160 mph wind rating (Storm Series and Metal Series) so the
-wind claim scales with the tier instead of staying vague. The impact class shows as its
-own badge on the customer option cards, the Project Investment screen, and the printed
-proposal's plan row and warranty cards.
+**Shingles are real, named Owens Corning products too.** Storm Series is
+TruDefinition® Duration STORM® (WeatherGuard Technology, Class 4 impact,
+limited lifetime warranty, 130 mph Wind Resistance Limited Warranty). Flex Series is
+TruDefinition® Duration FLEX™ (SBS polymer modified asphalt with SureNail
+Technology, Class 4 impact, limited lifetime warranty, 130 mph Wind Resistance Limited
+Warranty). Both figures are pulled from Owens Corning's own published spec sheets, not
+estimated. **Metal roofing** stays in the catalog (`SFR Metal Series`) as a rare special
+order for the Best tier, off by default, one checkbox away in Work Included when a job
+actually calls for it, and it carries the older 120+ mph figure since it has no verified
+manufacturer source for anything higher.
+
+**Impact class badge.** Good carries Class 3 Impact Rated (Architect Series, 130 mph
+wind). Better and Best carry Class 4 Impact Rated. The badge shows on the customer
+option cards, the Project Investment screen, and the printed proposal's plan row and
+warranty cards. If Metal Series gets switched on for a Best deal, the proposal's badge
+and warranty cards automatically switch to the metal specific language and figures.
+
+A rumored 160 mph wind program from Owens Corning came up but could not be verified
+against any of their published warranty documentation (their highest published tier,
+Platinum Preferred full system installation, still caps at 130 mph). Nothing in the
+tool claims 160 mph. If you can send the actual program name or a bulletin/PDF, it
+gets added once it is confirmed, not before.
 
 Customer facing option cards show the full checklist and price only. There is no
 description paragraph between the features and the monthly payment. Rep notes moved to
