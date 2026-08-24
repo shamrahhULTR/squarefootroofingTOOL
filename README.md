@@ -31,18 +31,43 @@ of the options block. They default to SFR Architect Series (Good), SFR Storm Ser
 
 Every line item lives in one `PRODUCTS` object that drives the rep checkbox, the
 customer facing name, the scope list, and the warranty list, so the four can never
-drift apart. 34 items covering the whole build: tear off, deck inspection and renail,
-decking allowance, synthetic underlayment, ice & water shield, valley liner, sealed
-penetrations, drip edge, step and counter flashing, valley metal, pipe boots and
-collars, roof to wall flashing, kick out diverters, chimney flashing, chimney cricket,
-ridge vent, soffit intake vents, off ridge and box vents, attic fan, starter strip,
-hip and ridge caps, six nail fastening pattern, skylights, seamless gutters,
-gutter guards, soffit and fascia, attic insulation, permit and final inspection,
-magnetic nail sweep, manufacturer warranty registration, and the workmanship warranty.
+drift apart. 37 items covering the whole build, including two lifetime upgrade items
+(Lifetime Pipe Boots, Lifetime Ice & Water Shield) and a Heat Stack Vent Replacement
+line that only Better and Best include by default.
 
-20 of them are checked by default as the standard system (`FULL_SYSTEM_COMPONENTS`).
-The rest are extras the rep checks per job. Adding a product to `PRODUCTS` is all it
-takes to make it appear in every screen and on the printed proposal.
+Good, Better, and Best are **cumulative by default**: `GOOD_COMPONENTS` is the base
+system (21 items with standard pipe boots and standard ice & water), `BETTER_COMPONENTS`
+is that same set with the two lifetime upgrades swapped in plus the heat stack vent
+item added, and `BEST_COMPONENTS` is identical to Better's set (Best's differentiator is
+the metal roofing material itself, not a longer checklist). This makes Better read as
+the obvious step up from Good, not a lateral move, and keeps Best from looking like a
+worse deal than Better on inclusions.
+
+A rep can still add or remove anything per option. The **Pull Down [Lower Tier]'s
+Items** button in the editor (only shown on Better and Best) re-syncs a tier to
+whatever is currently checked on the tier below it, so if Good gets a mid-appointment
+change, Better and Best can be brought back in sync with one tap instead of manually
+re-checking boxes.
+
+**Synthetic underlayment brand.** Good defaults to "Rep's Choice" among Deck Defense by
+Owens Corning, ProArmor by Owens Corning, or RhinoRoof. Better and Best default to Deck
+Defense by Owens Corning. The brand selector lives in the editor and only affects the
+Work Included label and scope line when Synthetic Underlayment is checked.
+
+**Impact class and wind rating.** Good carries a Class 3 Impact Rated badge (SFR
+Architect Series, 130 mph wind). Better and Best carry Class 4 Impact Rated badges,
+and both were bumped to a 160 mph wind rating (Storm Series and Metal Series) so the
+wind claim scales with the tier instead of staying vague. The impact class shows as its
+own badge on the customer option cards, the Project Investment screen, and the printed
+proposal's plan row and warranty cards.
+
+Customer facing option cards show the full checklist and price only. There is no
+description paragraph between the features and the monthly payment. Rep notes moved to
+a "Scope / Presentation Notes" field that is rep only and never renders on any
+customer facing screen.
+
+Adding a product to `PRODUCTS` is all it takes to make it appear in every screen and
+on the printed proposal.
 
 ## Financing: three lenders
 
@@ -108,6 +133,24 @@ addresses live in the `BRAND` block (`officeEmail`, `officePhone`).
 mark in the real Square Foot logo, cropped out of `sfr-logo.png`, navy strokes knocked
 to white, set on a rounded `#14265B` plate so it reads at 16px. Both are referenced in
 the `<head>`, listed in the manifest, and precached by the service worker.
+
+## Deal storage: one record per customer
+
+Deals auto save at the moments that matter (tapping **Present**, tapping **Print**, and
+starting **New Deal**) with no separate Store button. Saving reuses the same record as
+long as the customer name has not changed, so presenting the same deal five times in a
+row does not create five entries in the Deal Library.
+
+The moment the customer name changes, the next save creates a brand new deal record
+instead of overwriting the one already stored, so a rep who moves from one homeowner to
+the next without tapping **New Deal** never loses the previous customer's numbers. This
+is tracked with `dealIdentity()` (a normalized lowercase customer name) compared against
+`state.savedDealIdentity`, set the first time a deal is saved and checked on every save
+after that.
+
+Every stored deal keeps its own price, selected option, and payment plan, viewable and
+reopenable from the **Deals** button in the top bar. Deals sync to the optional Google
+Sheets backup (see below) independently of this local per name grouping.
 
 ## Deploying
 
