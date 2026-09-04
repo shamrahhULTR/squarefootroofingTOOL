@@ -133,7 +133,7 @@ stay for the price build to read correctly.
 ## Referral emails
 
 The referral screen (after the deal) has two send actions that compose a ready to send
-message **from `squarefootroofing@gmail.com`**:
+message **from `info@squarefootroofing.com`**:
 
 - **Send ‹name› Their Free Inspection Info** goes to the referred friend: what the
   free inspection is, the three steps to book it, the office phone, and a note that
@@ -142,11 +142,32 @@ message **from `squarefootroofing@gmail.com`**:
   $250 reward works and when it pays out.
 
 Online, this opens Gmail compose pinned to the business account
-(`authuser=squarefootroofing@gmail.com`) so the message genuinely sends from that
+(`authuser=info@squarefootroofing.com`) so the message genuinely sends from that
 address. Offline, it falls back to a `mailto:` compose in the device's mail app. If the
 referral contact is a phone number instead of an email, it opens a prefilled text
 message. The rep always reviews and taps send, so nothing is sent automatically. Both
 addresses live in the `BRAND` block (`officeEmail`, `officePhone`).
+
+## One-page printed proposal
+
+The proposal is engineered to fit exactly one printed page (Letter, 0.20in margins)
+even at the current 25-item Better/Best component list. Two things make that possible:
+
+- The scope grid (`printScopeGroups()`) uses each product's short branded label (e.g.
+  "Deck Defense® Synthetic Roof Underlayment by Owens Corning") instead of the full
+  descriptive sentence used in the live on-screen presentation (`scopeItems()`,
+  unchanged). Same information, roughly half the vertical space per line.
+- A redundant "Why This Plan Was Recommended" paragraph and a low-value "Next Step"
+  line were removed — both duplicated what the itemized scope and warranty sections
+  already say. Everything else stayed: full component list, all warranty cards, the
+  logo, both price numbers.
+
+Measured against the real `@media print` rules (not eyeballed): Good tier renders at
+850px against an ~1018px page budget (167px to spare), Better and Best render at
+971px (46px to spare) despite carrying 25 line items each. If new components get
+added to `PRODUCTS` later and push a tier over budget again, check
+`.scope-mini-card` heights first — "Water and Weather Protection" is the column
+that grows fastest since it now holds the wind-mitigation upgrades.
 
 ## Icons
 
