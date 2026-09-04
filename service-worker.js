@@ -1,4 +1,4 @@
-const CACHE = 'close-board-sfr-v2';
+const CACHE = 'close-board-sfr-v3';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon.svg', './favicon.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
