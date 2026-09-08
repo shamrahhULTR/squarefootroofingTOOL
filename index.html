@@ -2264,14 +2264,22 @@ function optionCard(k, mode='payment'){
     ].filter(Boolean);
     const discountHtml = discountLines.map(([label,amt])=>`<div class="discount-row"><span>${escapeHtml(label)}</span><span>-${money(amt)}</span></div>`).join('');
     const monthlyNote = isCustomer ? `Estimated monthly payment, financing subject to credit approval` : `${escapeHtml(c.plan.label)} · ${c.planTerm} months`;
+    // The Monthly Plan / Your Price Today toggle swaps which number leads here.
+    // Retail, itemized discounts, and Total Savings stay visible either way.
+    const financeLeads = modeView === 'finance';
+    const bigLabel = financeLeads ? escapeHtml(BRAND.paymentLabel) : 'Your Price Today';
+    const bigValue = financeLeads ? `${money(c.monthly)}<span style="font-size:20px">/mo</span>` : money(c.cardPrice);
+    const bigSubline = financeLeads ? monthlyNote : 'Final project price.';
+    const secondaryLabel = financeLeads ? 'Your Price Today' : escapeHtml(BRAND.paymentLabel);
+    const secondaryValue = financeLeads ? money(c.cardPrice) : `${money(c.monthly)}/mo`;
     block = `<div class="price-focus">
       <div class="retail-row"><span>Retail Price</span><s>${money(c.retail)}</s></div>
       ${discountHtml}
       ${totalSavings>0?`<div class="savings-total-row"><span>Total Savings</span><span>-${money(totalSavings)}</span></div>`:''}
-      <div class="label" style="margin-top:10px">Your Price Today</div>
-      <div class="big">${money(c.cardPrice)}</div>
-      <div class="monthly-row"><span class="m-label">${escapeHtml(BRAND.paymentLabel)}</span><span class="m-value">${money(c.monthly)}/mo</span></div>
-      <div class="subline">${monthlyNote}</div>
+      <div class="label" style="margin-top:10px">${bigLabel}</div>
+      <div class="big">${bigValue}</div>
+      <div class="monthly-row"><span class="m-label">${secondaryLabel}</span><span class="m-value">${secondaryValue}</span></div>
+      <div class="subline">${bigSubline}</div>
     </div>`;
   }
   const classChip = opt.impactClass ? `<div class="badge class-badge">${escapeHtml(opt.impactClass)}</div>` : '';
