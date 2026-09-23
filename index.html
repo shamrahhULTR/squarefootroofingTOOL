@@ -1614,6 +1614,7 @@
         <div class="field-app-status synced hide-in-presentation" id="connectionStatus" aria-live="polite"><span class="status-dot"></span><span><b>Checking</b><small>Preparing field app</small></span></div>
         <button class="btn secondary hide-in-presentation" id="newDealBtn">New Deal</button>
         <button class="btn secondary hide-in-presentation" id="loadBtn">Deals</button>
+        <button class="btn secondary hide-in-presentation" id="sendQuoteBtn">Send Quote</button>
         <button class="btn secondary hide-in-presentation" id="printBtn">Print</button>
         <button class="btn green" id="presentationBtn">Present</button>
       </div>
@@ -2586,7 +2587,7 @@ function decisionSummaryView(k){
     <div class="approval-note">This selected option includes the scope of work shown above and is ready to move forward with project approval and scheduling.</div>
   </div>`;
 }
-function selectedView(){const k=state.selectedOption||state.activeOption; const opt=state.options[k], c=calcOption(opt); return `<div class="selected-screen"><div class="selected-card"><div class="eyebrow">Your Selected Roofing System</div><h2 class="selected-title">${escapeHtml(opt.name)}</h2><div class="${k==='C'?'badge gold':'badge'}">${escapeHtml(opt.badge)}</div><div class="product-list" style="margin-top:18px">${productListHtml(opt, true)}</div></div><div class="next-step"><h3>Next Step: Reserve Installation Window</h3><p style="margin:0 0 18px;color:rgba(255,255,255,.88)">This plan gives your home the selected level of ${escapeHtml(BRAND.company)} protection.</p><div class="price-focus" style="background:#fff;border:0"><div class="label">${paymentModeLabel()}</div><div class="big">${displayPaymentValueHtml(opt,c)}</div><div class="subline">${optionHasPrice(opt)?selectedPaymentSubline(c):'Enter Retail Price before printing or presenting final pricing.'}</div></div><button class="choice-btn" id="printSelected" style="background:#fff;color:var(--navy);margin-top:14px">Print Customer Proposal</button><button class="choice-btn" data-next-view="referral" style="background:transparent;border:2px solid #fff;color:#fff;margin-top:10px">Continue to Referral Program</button></div></div>`;}
+function selectedView(){const k=state.selectedOption||state.activeOption; const opt=state.options[k], c=calcOption(opt); return `<div class="selected-screen"><div class="selected-card"><div class="eyebrow">Your Selected Roofing System</div><h2 class="selected-title">${escapeHtml(opt.name)}</h2><div class="${k==='C'?'badge gold':'badge'}">${escapeHtml(opt.badge)}</div><div class="product-list" style="margin-top:18px">${productListHtml(opt, true)}</div></div><div class="next-step"><h3>Next Step: Reserve Installation Window</h3><p style="margin:0 0 18px;color:rgba(255,255,255,.88)">This plan gives your home the selected level of ${escapeHtml(BRAND.company)} protection.</p><div class="price-focus" style="background:#fff;border:0"><div class="label">${paymentModeLabel()}</div><div class="big">${displayPaymentValueHtml(opt,c)}</div><div class="subline">${optionHasPrice(opt)?selectedPaymentSubline(c):'Enter Retail Price before printing or presenting final pricing.'}</div></div><button class="choice-btn" id="textQuoteBtn" style="background:#fff;color:var(--navy);margin-top:14px">Text Quote To Customer</button><button class="choice-btn" id="emailQuoteBtn" style="background:#fff;color:var(--navy);margin-top:10px">Email Quote To Customer</button><button class="choice-btn" id="printSelected" style="background:transparent;border:2px solid #fff;color:#fff;margin-top:10px">Print Customer Proposal</button><button class="choice-btn" data-next-view="referral" style="background:transparent;border:2px solid #fff;color:#fff;margin-top:10px">Continue to Referral Program</button></div></div>`;}
 function financingOptionsView(){
   const k = state.selectedOption || state.activeOption || focusedKey();
   const opt = state.options[k], c = calcOption(opt);
@@ -2692,6 +2693,107 @@ function referralMessage(kind){
       'If you do decide to move forward, financing is available through Foundation Finance and Acorn Finance. Acorn prequalifies you across 30+ lenders with a soft credit check that does not affect your credit score.'
     ].concat(signatureLines()).join('\n')
   };
+}
+/* ============================================================================
+   SEND QUOTE. Gets the selected option's numbers in front of the customer in
+   one tap, by text or email, using the contact already captured in Rep Setup.
+   No print dialog, no PDF, no attachment. Works offline via the mailto and
+   sms fallbacks, same as the referral rails below.
+   ========================================================================== */
+function quoteChannelFor(kind){
+  const email = String(state.customerEmail||'').trim();
+  const phone = String(state.customerPhone||'').trim();
+  if(kind === 'sms') return looksLikePhone(phone) ? phone : '';
+  if(kind === 'email') return looksLikeEmail(email) ? email : '';
+  // Auto: text is faster at the kitchen table, so prefer a usable phone.
+  if(looksLikePhone(phone)) return phone;
+  if(looksLikeEmail(email)) return email;
+  return '';
+}
+function customerFirstName(){
+  const n = String(state.customerName||'').trim();
+  return n ? n.split(/\s+/)[0] : '';
+}
+function quoteFigures(){
+  const k = state.selectedOption || state.activeOption || 'B';
+  const opt = state.options[k], c = calcOption(opt);
+  return { k, opt, c, hasPrice: optionHasPrice(opt), savings: Math.max(0, c.retail - c.cardPrice) };
+}
+function quoteSmsBody(){
+  const { opt, c, savings } = quoteFigures();
+  const name = customerFirstName();
+  const hi = name ? `Hi ${name}, ` : '';
+  const callLine = BRAND.officePhone ? ` Questions, call ${BRAND.officePhone}.` : '';
+  return [
+    `${hi}here is your roof quote from ${BRAND.company}.`,
+    `${opt.name}, full system install with a complete tear off.`,
+    savings > 0 ? `Retail ${money(c.retail)}, you save ${money(savings)}.` : '',
+    `Your price today: ${money(c.cardPrice)}, or ${money(c.monthly)}/mo with approved financing.`,
+    `Everything included is itemized on your written proposal.${callLine}`
+  ].filter(Boolean).join(' ');
+}
+function quoteEmailMessage(){
+  const { opt, c, savings } = quoteFigures();
+  const name = customerFirstName() || 'there';
+  const included = (opt.products||[])
+    .map(p => (PRODUCTS[p]||{}).customer)
+    .filter(Boolean);
+  const custom = String(opt.customProduct||'').trim();
+  if(custom) included.push(custom);
+  const savingsLines = savings > 0
+    ? [`Retail price: ${money(c.retail)}`, `Your savings: ${money(savings)}`]
+    : [];
+  return {
+    subject: `Your roof quote from ${BRAND.company}`,
+    body: [
+      `Hi ${name},`,
+      '',
+      `Thank you for your time today. Here is your written quote for the ${opt.name}, installed as a complete system from the deck up.`,
+      '',
+      'WHAT IS INCLUDED',
+      ...included.map(line => `  ${line}`),
+      '',
+      'YOUR INVESTMENT',
+      ...savingsLines.map(line => `  ${line}`),
+      `  Your price today: ${money(c.cardPrice)}`,
+      `  Estimated monthly payment: ${money(c.monthly)}/mo`,
+      '',
+      `Financing is available through ${lenderNames()}, subject to credit approval. Acorn Finance prequalifies you across 30+ lenders with a soft credit check that does not affect your credit score.`,
+      '',
+      'Reply to this email or call us and we will reserve your installation window.'
+    ].concat(signatureLines()).join('\n')
+  };
+}
+function openQuoteMessage(kind){
+  const { hasPrice } = quoteFigures();
+  if(!hasPrice){
+    showToast('Enter a retail price in Rep Setup before sending a quote.', 'warn');
+    return;
+  }
+  const to = quoteChannelFor(kind);
+  if(!to){
+    const need = kind === 'sms' ? 'phone number' : kind === 'email' ? 'email address' : 'phone number or email';
+    showToast(`Add the customer ${need} in Rep Setup first.`, 'warn');
+    return;
+  }
+  if(looksLikePhone(to) && !looksLikeEmail(to)){
+    window.location.href = `sms:${to.replace(/[^\d+]/g,'')}&body=${encodeURIComponent(quoteSmsBody())}`;
+    showToast('Text message ready. Review it and hit send.');
+    saveCurrentDeal({quiet:true});
+    return;
+  }
+  const msg = quoteEmailMessage();
+  const gmail = `https://mail.google.com/mail/?view=cm&fs=1&authuser=${encodeURIComponent(BRAND.officeEmail)}&to=${encodeURIComponent(to)}&su=${encodeURIComponent(msg.subject)}&body=${encodeURIComponent(msg.body)}`;
+  const mailto = `mailto:${to}?subject=${encodeURIComponent(msg.subject)}&body=${encodeURIComponent(msg.body)}`;
+  if(navigator.onLine){
+    const w = window.open(gmail, '_blank', 'noopener');
+    if(!w) window.location.href = mailto;
+    showToast(`Quote ready in ${BRAND.officeEmail}. Review it and hit send.`);
+  } else {
+    window.location.href = mailto;
+    showToast('Offline. Opening your mail app. It sends when you are back online.', 'warn');
+  }
+  saveCurrentDeal({quiet:true});
 }
 function openReferralMessage(kind){
   const msg = referralMessage(kind);
@@ -3324,7 +3426,11 @@ function renderSavedDeals(){
     renderSavedDeals();
   });
 }
-function bindPostRender(){const ps=$('#printSelected'); if(ps) ps.onclick=()=>{ensurePrintSheet(); window.print();};}
+function bindPostRender(){
+  const ps=$('#printSelected'); if(ps) ps.onclick=()=>{ensurePrintSheet(); window.print();};
+  const tq=$('#textQuoteBtn'); if(tq) tq.onclick=()=>openQuoteMessage('sms');
+  const eq=$('#emailQuoteBtn'); if(eq) eq.onclick=()=>openQuoteMessage('email');
+}
 function dealHasContent(){
   return String(state.customerName||'').trim() || ['A','B','C'].some(k=>clamp(state.options[k] && state.options[k].retail)>0);
 }
@@ -3332,6 +3438,7 @@ function dealHasContent(){
 $('#presentationBtn').onclick=async()=>{state.presentation=!state.presentation; if(state.presentation){const focused = state.selectedOption || state.activeOption || state.editOption || 'B'; state.view='investment'; state.focusOption=focused; state.activeOption=focused; state.selectedOption=focused; state.offerMode='finance'; saveCurrentDeal({quiet:true}); try{await document.documentElement.requestFullscreen?.()}catch(e){}} else {try{await document.exitFullscreen?.()}catch(e){}} render();};
 $('#newDealBtn').onclick=()=>startNewDeal();
 $('#loadBtn').onclick=()=>openDealModal();
+$('#sendQuoteBtn').onclick=()=>openQuoteMessage('auto');
 $('#printBtn').onclick=()=>{ensurePrintSheet(); if(dealHasContent()) saveCurrentDeal({quiet:true}); window.print();};
 window.addEventListener('beforeprint',ensurePrintSheet);
 $('#dealModalClose').onclick=()=>closeDealModal();
