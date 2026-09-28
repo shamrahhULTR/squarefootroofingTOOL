@@ -84,6 +84,10 @@
     .referral-kicker{font-size:12px;text-transform:uppercase;letter-spacing:.1em;font-weight:950;color:var(--muted)}
     .referral-amount{font-size:34px;font-weight:950;color:var(--navy);margin:8px 0}
     .referral-note{margin-top:14px;color:var(--muted);font-weight:700;font-size:13px}
+    .present-count{display:flex;gap:8px;flex-wrap:wrap}
+    .present-btn{flex:1 1 auto;border-radius:13px;padding:11px 10px;background:#fff;border:1.5px solid var(--line);color:var(--navy);font-weight:900;font-size:13px;white-space:nowrap}
+    .present-btn.active{background:var(--sfr-orange);border-color:var(--sfr-orange);color:#fff}
+    .option-edit-tab.not-presented{opacity:.45}
     .referral-send{margin-top:12px;display:grid;gap:9px;border-top:1px solid var(--line);padding-top:14px}
     .referral-send-btn{background:var(--sfr-orange);color:#fff}
     .referral-send-btn.ghost{background:#fff;color:var(--navy);border:2px solid var(--line)}
@@ -1630,6 +1634,7 @@
         <div class="field"><label>Property Address</label><input id="address" placeholder="Street address / city"></div>
         <div class="row"><div class="field"><label>Customer Phone</label><input id="customerPhone" type="tel" inputmode="tel" placeholder="Phone number"></div><div class="field"><label>Customer Email</label><input id="customerEmail" type="email" placeholder="Email address"></div></div>
         <div class="divider"></div>
+        <div class="field"><label>Options To Present</label><div class="present-count" id="presentCount"></div><div class="help">Choose how many options the customer sees. Options you leave out still stay built and priced, they are just hidden from the presentation.</div></div>
         <div class="section-title"><h2>Option Builder</h2></div>
         <div class="tabs" id="editTabs"></div>
         <div id="optionEditor"></div>
@@ -1855,7 +1860,7 @@ const defaultOptions = () => ({
 });
 function savedRepInfo(){try{return JSON.parse(localStorage.getItem(REP_INFO_KEY)||'{}')||{};}catch(e){return {};}}
 function persistRepInfo(){try{localStorage.setItem(REP_INFO_KEY, JSON.stringify({repName:state.repName||'', branch:state.branch||BRAND.defaultBranch}));}catch(e){}}
-const defaultState = () => ({customerName:'', customerPhone:'', customerEmail:'', address:'', repName:savedRepInfo().repName||'', branch:savedRepInfo().branch||BRAND.defaultBranch, apptDate:new Date().toISOString().slice(0,10), activeOption:'B', editOption:'B', selectedOption:'B', view:'investment', focusOption:'B', offerMode:'finance', presentation:false, referral:{name:'',contact:''}, options:defaultOptions()});
+const defaultState = () => ({customerName:'', customerPhone:'', customerEmail:'', address:'', repName:savedRepInfo().repName||'', branch:savedRepInfo().branch||BRAND.defaultBranch, apptDate:new Date().toISOString().slice(0,10), activeOption:'B', editOption:'B', selectedOption:'B', view:'investment', focusOption:'B', presentedOptions:['A','B','C'], offerMode:'finance', presentation:false, referral:{name:'',contact:''}, options:defaultOptions()});
 let state = defaultState();
 const $ = s => document.querySelector(s);
 const money = n => (isFinite(n)?n:0).toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
@@ -2088,7 +2093,7 @@ function editKey(){
 }
 function renderTabs(){
   const current = editKey();
-  $('#editTabs').innerHTML = ['A','B','C'].map(k=>`<button class="tab option-edit-tab ${current===k?'active':''}" data-edit-opt="${k}">${escapeHtml(TIER_LABELS[k])}</button>`).join('');
+  $('#editTabs').innerHTML = ['A','B','C'].map(k=>`<button class="tab option-edit-tab ${current===k?'active':''}${isPresented(k)?'':' not-presented'}" data-edit-opt="${k}" title="${isPresented(k)?'':'Hidden from the presentation'}">${escapeHtml(TIER_LABELS[k])}${isPresented(k)?'':' (hidden)'}</button>`).join('');
   document.querySelectorAll('#editTabs .tab').forEach(b=>b.onclick=()=>{state.editOption=b.dataset.editOpt; render();});
 }
 function lenderNames(){
@@ -2302,12 +2307,43 @@ function renderMainView(){
 function pricingExplanationView(){
   return ['investment','today','decision','selected'].includes(state.view);
 }
+const PRESENT_PRESETS = [
+  {keys:['A','B','C'], label:'All Three'},
+  {keys:['B','C'],     label:'Better + Best'},
+  {keys:['A','B'],     label:'Good + Better'}
+];
+function presentedKeys(){
+  const picked = (state.presentedOptions || []).filter(k => ['A','B','C'].includes(k));
+  return picked.length ? ['A','B','C'].filter(k => picked.includes(k)) : ['A','B','C'];
+}
+function isPresented(k){ return presentedKeys().includes(k); }
+/* Keep focus/active/selected pointed at something the customer can actually see. */
+function normalisePresentedSelection(){
+  const keys = presentedKeys();
+  if(state.focusOption && state.focusOption !== 'ALL' && !keys.includes(state.focusOption)) state.focusOption = keys[0];
+  if(!keys.includes(state.activeOption)) state.activeOption = keys[0];
+  if(!keys.includes(state.selectedOption)) state.selectedOption = keys[0];
+}
+function renderPresentCount(){
+  const host = $('#presentCount');
+  if(!host) return;
+  const current = presentedKeys().join('');
+  host.innerHTML = PRESENT_PRESETS.map(p=>{
+    const active = p.keys.join('') === current;
+    return `<button class="present-btn ${active?'active':''}" data-present="${p.keys.join('')}">${escapeHtml(p.label)}</button>`;
+  }).join('');
+  host.querySelectorAll('[data-present]').forEach(b=>b.onclick=()=>{
+    state.presentedOptions = b.dataset.present.split('');
+    normalisePresentedSelection();
+    render();
+  });
+}
 function focusedKey(){
   return state.focusOption && state.focusOption !== 'ALL' ? state.focusOption : (state.activeOption || state.selectedOption || 'B');
 }
 function visibleKeys(){
   if(pricingExplanationView()) return [focusedKey()];
-  return state.focusOption && state.focusOption !== 'ALL' ? [state.focusOption] : ['A','B','C'];
+  return state.focusOption && state.focusOption !== 'ALL' ? [state.focusOption] : presentedKeys();
 }
 function flowBar(){
   if(!state.presentation) return '';
@@ -2317,7 +2353,7 @@ function flowBar(){
   const nextLabel = viewLabels[next] || 'Next Step';
   const focused = focusedKey();
   const lockToSingle = pricingExplanationView();
-  const focusOptions = lockToSingle ? ['A','B','C'] : ['ALL','A','B','C'];
+  const focusOptions = lockToSingle ? presentedKeys() : ['ALL', ...presentedKeys()];
   const focusButtons = focusOptions.map(k=>{
     const label = k==='ALL' ? 'All Options' : (TIER_LABELS[k] || state.options[k].label);
     const active = lockToSingle ? focused===k : state.focusOption===k;
@@ -2384,9 +2420,7 @@ function projectInvestmentView(){
 
     <div class="project-focus-selector">
       <span>Focus</span>
-      <button class="${k==='A'?'active':''}" data-focus="A">Good</button>
-      <button class="${k==='B'?'active':''}" data-focus="B">Better</button>
-      <button class="${k==='C'?'active':''}" data-focus="C">Best</button>
+      ${presentedKeys().map(pk=>`<button class="${k===pk?'active':''}" data-focus="${pk}">${escapeHtml(TIER_LABELS[pk])}</button>`).join('')}
     </div>
 
     <div class="project-investment-grid">
@@ -2972,7 +3006,7 @@ function renderPrintSheet(){
     </div>
   </div>`;
 }
-function render(rebuildEditor=true){document.body.classList.toggle('presentation',state.presentation); $('#presentationBtn').textContent=state.presentation?'Exit Presentation':'Present'; setBaseInputs(); renderHeaderInfo(); renderHero(); renderTabs(); if(rebuildEditor) renderOptionEditor(); renderShellControls(); renderMainView(); schedulePrintSheet(); bindPostRender(); applyBrandAssets(); scheduleAutosave();}
+function render(rebuildEditor=true){document.body.classList.toggle('presentation',state.presentation); $('#presentationBtn').textContent=state.presentation?'Exit Presentation':'Present'; setBaseInputs(); renderHeaderInfo(); renderHero(); renderPresentCount(); renderTabs(); if(rebuildEditor) renderOptionEditor(); renderShellControls(); renderMainView(); schedulePrintSheet(); bindPostRender(); applyBrandAssets(); scheduleAutosave();}
 function bindFlowControls(){
   document.querySelectorAll('[data-focus]').forEach(b=>b.onclick=()=>{
     state.focusOption=b.dataset.focus;
@@ -3435,7 +3469,7 @@ function dealHasContent(){
   return String(state.customerName||'').trim() || ['A','B','C'].some(k=>clamp(state.options[k] && state.options[k].retail)>0);
 }
 // Deals store themselves at the moments that matter (present, print, new deal). No separate Store button.
-$('#presentationBtn').onclick=async()=>{state.presentation=!state.presentation; if(state.presentation){const focused = state.selectedOption || state.activeOption || state.editOption || 'B'; state.view='investment'; state.focusOption=focused; state.activeOption=focused; state.selectedOption=focused; state.offerMode='finance'; saveCurrentDeal({quiet:true}); try{await document.documentElement.requestFullscreen?.()}catch(e){}} else {try{await document.exitFullscreen?.()}catch(e){}} render();};
+$('#presentationBtn').onclick=async()=>{state.presentation=!state.presentation; if(state.presentation){normalisePresentedSelection(); const focused = presentedKeys().includes(state.selectedOption) ? state.selectedOption : presentedKeys()[0]; state.view='investment'; state.focusOption=focused; state.activeOption=focused; state.selectedOption=focused; state.offerMode='finance'; saveCurrentDeal({quiet:true}); try{await document.documentElement.requestFullscreen?.()}catch(e){}} else {try{await document.exitFullscreen?.()}catch(e){}} render();};
 $('#newDealBtn').onclick=()=>startNewDeal();
 $('#loadBtn').onclick=()=>openDealModal();
 $('#sendQuoteBtn').onclick=()=>openQuoteMessage('auto');
